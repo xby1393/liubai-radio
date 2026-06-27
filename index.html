@@ -1070,7 +1070,7 @@
         const speeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
         let speedIndex = 2;
 
-        let importedAudios = [];
+                let importedAudios = [];
         let currentSource = null;
         let currentIndex = 0;
         let isPlaying = false;
@@ -1080,6 +1080,73 @@
         let sleepTimer = null;
         let sleepMinutes = 0;
         let sleepRemaining = 0;
+
+        // === IndexedDB 持久化存储 ===
+        const DB_NAME = 'LiubaiRadioDB';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'audios';
+        let db = null;
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => resolve(request.result);
+                request.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains(STORE_NAME)) {
+                        database.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+
+        async function saveAudioToDB(audioData) {
+            if (!db) db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).put(audioData);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        async function loadAudiosFromDB() {
+            if (!db) db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const request = tx.objectStore(STORE_NAME).getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function deleteAudioFromDB(id) {
+            if (!db) db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).delete(id);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        // 页面加载时恢复音频
+        async function restoreAudios() {
+            try {
+                const saved = await loadAudiosFromDB();
+                if (saved.length > 0) {
+                    importedAudios = saved.map(a => ({
+                        ...a,
+                        url: a.blob ? URL.createObjectURL(new Blob([a.blob], { type: a.type || 'audio/mpeg' })) : a.url
+                    }));
+                    renderImported();
+                    showToast('已恢复 ' + saved.length + ' 个音频');
+                }
+            } catch (err) {
+                console.error('Failed to restore audios:', err);
+            }
+        }
 
         const audio = document.getElementById('audioPlayer');
         const importZone = document.getElementById('importZone');
@@ -1256,14 +1323,25 @@
             fileInput.value = '';
         });
 
-        function handleFiles(files) {
+                async function handleFiles(files) {
             let count = 0;
             for (const file of files) {
                 if (!file.type.startsWith('audio/')) continue;
                 const id = Date.now() + '_' + Math.random().toString(36).slice(2, 6);
                 const url = URL.createObjectURL(file);
                 const name = file.name.replace(/\.[^.]+$/, '');
-                importedAudios.push({ id, name, url, size: file.size, lrc: null, lrcName: '' });
+                const audioData = { id, name, url, size: file.size, type: file.type, lrc: null, lrcName: '' };
+
+                // 读取文件为 ArrayBuffer 并保存到 IndexedDB
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    audioData.blob = arrayBuffer;
+                    await saveAudioToDB(audioData);
+                } catch (err) {
+                    console.error('Failed to save audio to DB:', err);
+                }
+
+                importedAudios.push(audioData);
                 count++;
             }
             if (count > 0) {
@@ -1297,7 +1375,7 @@
             }).join('');
         }
 
-        function removeImported(index) {
+                async function removeImported(index) {
             if (currentSource === 'imported' && currentIndex === index) {
                 audio.pause();
                 audio.src = '';
@@ -1309,9 +1387,17 @@
                 currentLyricIndex = -1;
                 renderLyrics();
             }
-            URL.revokeObjectURL(importedAudios[index].url);
+            const removed = importedAudios[index];
+            URL.revokeObjectURL(removed.url);
             importedAudios.splice(index, 1);
             renderImported();
+
+            // 从 IndexedDB 删除
+            try {
+                await deleteAudioFromDB(removed.id);
+            } catch (err) {
+                console.error('Failed to delete audio from DB:', err);
+            }
         }
 
         // === 歌词导入 ===
@@ -1320,11 +1406,11 @@
             lrcInput.click();
         }
 
-        lrcInput.addEventListener('change', (e) => {
+                lrcInput.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file || lrcTargetIndex === null) return;
             const reader = new FileReader();
-            reader.onload = (ev) => {
+            reader.onload = async (ev) => {
                 importedAudios[lrcTargetIndex].lrc = parseLRC(ev.target.result);
                 importedAudios[lrcTargetIndex].lrcName = file.name;
                 renderImported();
@@ -1335,6 +1421,13 @@
                     lyricsPanel.classList.add('show');
                 }
                 showToast('歌词已导入');
+
+                // 保存歌词到 IndexedDB
+                try {
+                    await saveAudioToDB(importedAudios[lrcTargetIndex]);
+                } catch (err) {
+                    console.error('Failed to save lyrics to DB:', err);
+                }
             };
             reader.readAsText(file);
             lrcInput.value = '';
@@ -1541,8 +1634,11 @@
                 case 'KeyP':
                     prevTrack();
                     break;
-            }
+                        }
         });
+
+        // 页面加载时恢复音频
+        restoreAudios();
     </script>
 
 </body>
