@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留白电台 — 一个人的播客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #fafafa;
+            --card: #fff;
+            --text: #1a1a1a;
+            --text2: #666;
+            --text3: #999;
+            --text4: #bbb;
+            --border: #eee;
+            --border2: #ddd;
+            --accent: #667eea;
+            --accent2: #764ba2;
+            --shadow: rgba(0,0,0,0.04);
+            --shadow2: rgba(0,0,0,0.06);
+        }
+
+        body.dark {
+            --bg: #111;
+            --card: #1a1a1a;
+            --text: #e8e8e8;
+            --text2: #aaa;
+            --text3: #777;
+            --text4: #555;
+            --border: #2a2a2a;
+            --border2: #333;
+            --shadow: rgba(0,0,0,0.2);
+            --shadow2: rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.4s, color 0.4s;
+        }
+
+        /* 导航 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 3rem;
+            position: sticky;
+            top: 0;
+            background: color-mix(in srgb, var(--bg) 85%, transparent);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-brand {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text3);
+            font-size: 0.88rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text); }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border2);
+            background: var(--card);
+            color: var(--text2);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem 3rem;
+        }
+
+        .cover {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #fff;
+            box-shadow: 0 12px 40px color-mix(in srgb, var(--accent) 30%, transparent);
+            animation: coverPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes coverPulse {
+            0%, 100% { box-shadow: 0 12px 40px color-mix(in srgb, var(--accent) 30%, transparent); }
+            50% { box-shadow: 0 16px 50px color-mix(in srgb, var(--accent) 45%, transparent); }
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+        }
+
+        .tagline {
+            font-size: 0.95rem;
+            color: var(--text3);
+            margin-top: 0.6rem;
+            letter-spacing: 0.05em;
+        }
+
+        .subscribe-btn {
+            display: inline-block;
+            margin-top: 1.8rem;
+            padding: 0.7rem 2.2rem;
+            border: 1px solid var(--text);
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.88rem;
+            letter-spacing: 0.08em;
+            transition: all 0.25s;
+        }
+
+        .subscribe-btn:hover {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .divider {
+            width: 40px;
+            height: 1px;
+            background: var(--border2);
+            margin: 2.5rem auto;
+        }
+
+        /* 内容区 */
+        main {
+            flex: 1;
+            max-width: 680px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 2rem 8rem;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            color: var(--text4);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 导入区域 */
+        .import-zone {
+            border: 2px dashed var(--border2);
+            border-radius: 14px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.25s;
+            cursor: pointer;
+            background: var(--card);
+        }
+
+        .import-zone:hover,
+        .import-zone.dragover {
+            border-color: var(--accent);
+            background: color-mix(in srgb, var(--accent) 4%, var(--card));
+        }
+
+        .import-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+
+        .import-text {
+            font-size: 0.92rem;
+            color: var(--text3);
+            margin-bottom: 0.4rem;
+        }
+
+        .import-hint {
+            font-size: 0.78rem;
+            color: var(--text4);
+        }
+
+        .import-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.55rem 1.6rem;
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            background: transparent;
+            color: var(--accent);
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .import-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        #fileInput { display: none; }
+
+        /* 导入的音频列表 */
+        .imported-list { margin-bottom: 2rem; }
+
+        .imported-item {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1rem 1.4rem;
+            margin-bottom: 0.6rem;
+            box-shadow: 0 1px 3px var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .imported-item:hover {
+            box-shadow: 0 4px 12px var(--shadow2);
+        }
+
+        .imported-item.playing {
+            background: color-mix(in srgb, var(--accent) 6%, var(--card));
+            border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+
+        .imported-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .imported-info { flex: 1; min-width: 0; }
+
+        .imported-name {
+            font-size: 0.88rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .imported-meta {
+            font-size: 0.75rem;
+            color: var(--text4);
+            margin-top: 0.2rem;
+        }
+
+        .imported-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .imported-lrc-btn {
+            background: none;
+            border: 1px solid var(--border2);
+            border-radius: 6px;
+            color: var(--text3);
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .imported-lrc-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .imported-lrc-btn.has-lrc {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: color-mix(in srgb, var(--accent) 8%, transparent);
+        }
+
+        .imported-remove {
+            background: none;
+            border: none;
+            color: var(--text4);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.3rem;
+            transition: color 0.2s;
+        }
+
+        .imported-remove:hover { color: #e74c3c; }
+
+        /* 歌词面板 */
+        .lyrics-panel {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px var(--shadow);
+            display: none;
+        }
+
+        .lyrics-panel.show { display: block; }
+
+        .lyrics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .lyrics-header h3 {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.08em;
+        }
+
+        .lyrics-close {
+            background: none;
+            border: none;
+            color: var(--text4);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .lyrics-close:hover { color: var(--text3); }
+
+        .lyrics-body {
+            max-height: 280px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .lyrics-body::-webkit-scrollbar { width: 4px; }
+        .lyrics-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+        .lyric-line {
+            padding: 0.5rem 0;
+            font-size: 0.92rem;
+            color: var(--text4);
+            text-align: center;
+            transition: all 0.35s ease;
+            line-height: 1.8;
+        }
+
+        .lyric-line.active {
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .lyric-line.past { color: var(--text4); }
+
+        .lyrics-empty {
+            text-align: center;
+            color: var(--text4);
+            font-size: 0.85rem;
+            padding: 2rem 0;
+        }
+
+        /* 单集卡片 */
+        .episode {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px var(--shadow);
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .episode:hover {
+            box-shadow: 0 6px 20px var(--shadow2);
+            transform: translateY(-2px);
+        }
+
+        .episode-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.6rem;
+        }
+
+        .episode-num {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .episode-date {
+            font-size: 0.78rem;
+            color: var(--text4);
+        }
+
+        .episode h3 {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .episode-desc {
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--text3);
+        }
+
+        .episode-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .duration {
+            font-size: 0.78rem;
+            color: var(--text4);
+        }
+
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .play-btn:hover {
+            background: #5a6fd6;
+            transform: scale(1.08);
+        }
+
+        /* 播放器 */
+        .player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 200;
+            box-shadow: 0 -4px 20px var(--shadow);
+        }
+
+        .player-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .player-sub {
+            font-size: 0.72rem;
+            color: var(--text4);
+            margin-top: 0.1rem;
+        }
+
+        /* 波形可视化 */
+        .visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 28px;
+            margin: 0 0.5rem;
+        }
+
+        .viz-bar {
+            width: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: height 0.1s;
+            opacity: 0.6;
+        }
+
+        .viz-bar.active { opacity: 1; }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .ctrl-btn {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: var(--text2);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .ctrl-btn:hover { color: var(--text); }
+
+        .ctrl-btn.main {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--text);
+            color: var(--bg);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ctrl-btn.main:hover { opacity: 0.85; }
+
+        .progress-bar {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: width 0.1s;
+        }
+
+        .bar-time {
+            font-size: 0.7rem;
+            color: var(--text4);
+            min-width: 32px;
+        }
+
+        /* 音量 */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .volume-icon {
+            font-size: 0.95rem;
+            color: var(--text3);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .volume-slider {
+            width: 70px;
+            height: 3px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--border);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: none;
+        }
+
+        .volume-pct {
+            font-size: 0.68rem;
+            color: var(--text4);
+            min-width: 26px;
+            text-align: right;
+        }
+
+        /* 倍速按钮 */
+        .speed-btn {
+            background: none;
+            border: 1px solid var(--border2);
+            border-radius: 6px;
+            color: var(--text3);
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            min-width: 36px;
+        }
+
+        .speed-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* 睡眠定时器 */
+        .sleep-btn {
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+            color: var(--text3);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .sleep-btn:hover { color: var(--text); }
+
+        .sleep-btn.active {
+            color: var(--accent);
+        }
+
+        .sleep-badge {
+            position: absolute;
+            top: -4px;
+            right: -6px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.55rem;
+            padding: 1px 4px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .sleep-btn.active .sleep-badge { display: block; }
+
+        /* 睡眠定时器弹窗 */
+        .sleep-popup {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 8px 30px var(--shadow2);
+            display: none;
+            margin-bottom: 0.5rem;
+            min-width: 160px;
+        }
+
+        .sleep-popup.show { display: block; }
+
+        .sleep-popup h4 {
+            font-size: 0.78rem;
+            color: var(--text3);
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+        }
+
+        .sleep-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .sleep-opt {
+            background: none;
+            border: none;
+            padding: 0.4rem 0.6rem;
+            text-align: left;
+            font-size: 0.82rem;
+            color: var(--text2);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .sleep-opt:hover {
+            background: color-mix(in srgb, var(--accent) 8%, transparent);
+            color: var(--accent);
+        }
+
+        .sleep-opt.active {
+            background: color-mix(in srgb, var(--accent) 12%, transparent);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* 关于 */
+        .about-section {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 2.5rem 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 1px 3px var(--shadow);
+        }
+
+        .about-section h2 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .about-section p {
+            font-size: 0.9rem;
+            line-height: 1.9;
+            color: var(--text3);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+            color: var(--text3);
+            transition: all 0.2s;
+        }
+
+        .social-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* 快捷键提示 */
+        .shortcuts-hint {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            font-size: 0.75rem;
+            color: var(--text4);
+        }
+
+        .shortcuts-hint kbd {
+            background: var(--card);
+            border: 1px solid var(--border2);
+            border-radius: 4px;
+            padding: 0.1rem 0.4rem;
+            font-size: 0.7rem;
+            font-family: inherit;
+        }
+
+        /* Toast 通知 */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: var(--text);
+            color: var(--bg);
+            padding: 0.6rem 1.4rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.78rem;
+            color: var(--text4);
+            padding-bottom: 6rem;
+        }
+
+        /* 动画 */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .episode { animation: fadeUp 0.5s ease both; }
+        .episode:nth-child(1) { animation-delay: 0.05s; }
+        .episode:nth-child(2) { animation-delay: 0.1s; }
+        .episode:nth-child(3) { animation-delay: 0.15s; }
+        .episode:nth-child(4) { animation-delay: 0.2s; }
+        .episode:nth-child(5) { animation-delay: 0.25s; }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .hero { padding: 3rem 1.5rem 2rem; }
+            h1 { font-size: 1.8rem; }
+            .player { padding: 0.6rem 1rem; gap: 0.6rem; flex-wrap: wrap; }
+            .progress-bar { order: 10; flex-basis: 100%; }
+            .volume-control { display: none; }
+            .visualizer { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-brand">留白电台</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#episodes">节目</a></li>
+                <li><a href="#about">关于</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="切换深色模式">🌙</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="cover">🎙</div>
+        <h1>留 白 电 台</h1>
+        <p class="tagline">在喧嚣的世界里，留一点安静给自己</p>
+        <a href="#episodes" class="subscribe-btn">开始收听</a>
+    </header>
+
+    <div class="divider"></div>
+
+    <main id="episodes">
+        <div class="section-title">导入音频</div>
+
+        <div class="import-zone" id="importZone">
+            <div class="import-icon">🎵</div>
+            <div class="import-text">拖拽音频文件到这里</div>
+            <div class="import-hint">支持 MP3、WAV、OGG、AAC、FLAC 格式</div>
+            <button class="import-btn" onclick="document.getElementById('fileInput').click()">选择文件</button>
+            <input type="file" id="fileInput" accept="audio/*" multiple>
+        </div>
+
+        <div class="imported-list" id="importedList"></div>
+
+        <div class="lyrics-panel" id="lyricsPanel">
+            <div class="lyrics-header">
+                <h3>♫ 歌词</h3>
+                <button class="lyrics-close" onclick="toggleLyricsPanel()">✕</button>
+            </div>
+            <div class="lyrics-body" id="lyricsBody">
+                <div class="lyrics-empty">暂无歌词</div>
+            </div>
+        </div>
+
+        <div class="section-title">最近更新</div>
+
+        <div class="episode" onclick="playEpisode(0)">
+            <div class="episode-top">
+                <span class="episode-num">EP.012</span>
+                <span class="episode-date">6月25日</span>
+            </div>
+            <h3>那些没说出口的话</h3>
+            <p class="episode-desc">有些话烂在肚子里，不是因为不重要，而是因为太重要了。我们聊了聊沉默背后的重量。</p>
+            <div class="episode-bottom">
+                <span class="duration">28:15</span>
+                <button class="play-btn" onclick="event.stopPropagation(); playEpisode(0)">▶</button>
+            </div>
+        </div>
+
+        <div class="episode" onclick="playEpisode(1)">
+            <div class="episode-top">
+                <span class="episode-num">EP.011</span>
+                <span class="episode-date">6月18日</span>
+            </div>
+            <h3>一个人住的第三年</h3>
+            <p class="episode-desc">独居不是孤独，是一种和自己相处的能力。从做饭到失眠，聊聊那些一个人的夜晚。</p>
+            <div class="episode-bottom">
+                <span class="duration">34:42</span>
+                <button class="play-btn" onclick="event.stopPropagation(); playEpisode(1)">▶</button>
+            </div>
+        </div>
+
+        <div class="episode" onclick="playEpisode(2)">
+            <div class="episode-top">
+                <span class="episode-num">EP.010</span>
+                <span class="episode-date">6月11日</span>
+            </div>
+            <h3>雨天适合想事情</h3>
+            <p class="episode-desc">下雨的时候，世界好像按了慢放键。这期没有主题，只是在雨声里随便聊聊。</p>
+            <div class="episode-bottom">
+                <span class="duration">22:08</span>
+                <button class="play-btn" onclick="event.stopPropagation(); playEpisode(2)">▶</button>
+            </div>
+        </div>
+
+        <div class="episode" onclick="playEpisode(3)">
+            <div class="episode-top">
+                <span class="episode-num">EP.009</span>
+                <span class="episode-date">6月4日</span>
+            </div>
+            <h3>二十几岁的迷茫是正常的</h3>
+            <p class="episode-desc">不知道想要什么，但很清楚不想要什么——这大概就是成长的真相。</p>
+            <div class="episode-bottom">
+                <span class="duration">31:56</span>
+                <button class="play-btn" onclick="event.stopPropagation(); playEpisode(3)">▶</button>
+            </div>
+        </div>
+
+        <div class="episode" onclick="playEpisode(4)">
+            <div class="episode-top">
+                <span class="episode-num">EP.008</span>
+                <span class="episode-date">5月28日</span>
+            </div>
+            <h3>读了一本很旧的书</h3>
+            <p class="episode-desc">在二手书店翻到一本八十年代的散文集，纸页泛黄，字迹温柔。聊聊阅读这件事。</p>
+            <div class="episode-bottom">
+                <span class="duration">26:33</span>
+                <button class="play-btn" onclick="event.stopPropagation(); playEpisode(4)">▶</button>
+            </div>
+        </div>
+
+        <div class="shortcuts-hint">
+            快捷键：<kbd>Space</kbd> 播放/暂停 · <kbd>←</kbd><kbd>→</kbd> 快退/快进 10s · <kbd>↑</kbd><kbd>↓</kbd> 音量 · <kbd>N</kbd> 下一集 · <kbd>P</kbd> 上一集
+        </div>
+
+        <div class="about-section" id="about">
+            <h2>关于电台</h2>
+            <p>留白电台是一档个人播客，没有固定主题，没有专业设备，只有一个想说话的人和一个愿意听的你。<br><br>每周三更新，用声音记录那些值得停下来想一想的时刻。</p>
+            <div class="social-links">
+                <a href="#" class="social-link" title="Apple Podcasts">🎧</a>
+                <a href="#" class="social-link" title="小宇宙">🪐</a>
+                <a href="#" class="social-link" title="RSS">📡</a>
+                <a href="#" class="social-link" title="邮件">✉</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>© 2026 留白电台 · 用声音留白</footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- 底部播放器 -->
+    <div class="player">
+        <div class="player-info">
+            <div class="player-title" id="playerTitle">选择一集开始收听</div>
+            <div class="player-sub" id="playerSub">留白电台</div>
+        </div>
+
+        <!-- 波形可视化 -->
+        <div class="visualizer" id="visualizer"></div>
+
+        <div class="progress-bar">
+            <span class="bar-time" id="currentTime">0:00</span>
+            <div class="bar-track" id="barTrack">
+                <div class="bar-fill" id="barFill"></div>
+            </div>
+            <span class="bar-time" id="totalTime">0:00</span>
+        </div>
+
+        <div class="player-controls">
+            <button class="ctrl-btn" onclick="prevTrack()" title="上一集 (P)">⏮</button>
+            <button class="ctrl-btn main" id="playPause" onclick="togglePlay()" title="播放/暂停 (Space)">▶</button>
+            <button class="ctrl-btn" onclick="nextTrack()" title="下一集 (N)">⏭</button>
+        </div>
+
+        <button class="speed-btn" id="speedBtn" onclick="cycleSpeed()" title="播放速度">1.0x</button>
+
+        <div class="volume-control">
+            <span class="volume-icon" id="volumeIcon" onclick="toggleMute()">🔊</span>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80" oninput="changeVolume(this.value)">
+            <span class="volume-pct" id="volumePct">80%</span>
+        </div>
+
+        <div style="position:relative">
+            <button class="sleep-btn" id="sleepBtn" onclick="toggleSleepPopup()" title="睡眠定时器">
+                💤
+                <span class="sleep-badge" id="sleepBadge"></span>
+            </button>
+            <div class="sleep-popup" id="sleepPopup">
+                <h4>睡眠定时器</h4>
+                <div class="sleep-options">
+                    <button class="sleep-opt" onclick="setSleepTimer(5)">5 分钟</button>
+                    <button class="sleep-opt" onclick="setSleepTimer(15)">15 分钟</button>
+                    <button class="sleep-opt" onclick="setSleepTimer(30)">30 分钟</button>
+                    <button class="sleep-opt" onclick="setSleepTimer(60)">1 小时</button>
+                    <button class="sleep-opt" onclick="setSleepTimer(0)">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer"></audio>
+    <input type="file" id="lrcInput" accept=".lrc,.txt" style="display:none">
+
+    <script>
+        // === 数据 ===
+        const builtinEpisodes = [
+            { num: 'EP.012', title: '那些没说出口的话', dur: '28:15', durSec: 28*60+15 },
+            { num: 'EP.011', title: '一个人住的第三年', dur: '34:42', durSec: 34*60+42 },
+            { num: 'EP.010', title: '雨天适合想事情', dur: '22:08', durSec: 22*60+8 },
+            { num: 'EP.009', title: '二十几岁的迷茫是正常的', dur: '31:56', durSec: 31*60+56 },
+            { num: 'EP.008', title: '读了一本很旧的书', dur: '26:33', durSec: 26*60+33 },
+        ];
+
+        const speeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+        let speedIndex = 2;
+
+        let importedAudios = [];
+        let currentSource = null;
+        let currentIndex = 0;
+        let isPlaying = false;
+        let lyricsData = [];
+        let currentLyricIndex = -1;
+        let lrcTargetIndex = null;
+        let sleepTimer = null;
+        let sleepMinutes = 0;
+        let sleepRemaining = 0;
+
+        const audio = document.getElementById('audioPlayer');
+        const importZone = document.getElementById('importZone');
+        const fileInput = document.getElementById('fileInput');
+        const importedList = document.getElementById('importedList');
+        const lrcInput = document.getElementById('lrcInput');
+        const lyricsPanel = document.getElementById('lyricsPanel');
+        const lyricsBody = document.getElementById('lyricsBody');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        audio.volume = 0.8;
+
+        // === 波形可视化 ===
+        const vizContainer = document.getElementById('visualizer');
+        const VIZ_BARS = 16;
+        for (let i = 0; i < VIZ_BARS; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'viz-bar';
+            bar.style.height = '4px';
+            vizContainer.appendChild(bar);
+        }
+        const vizBars = vizContainer.querySelectorAll('.viz-bar');
+
+        function animateViz() {
+            if (!isPlaying) {
+                vizBars.forEach(b => { b.style.height = '4px'; b.classList.remove('active'); });
+                return;
+            }
+            vizBars.forEach((b, i) => {
+                const h = 4 + Math.random() * 22;
+                b.style.height = h + 'px';
+                b.classList.toggle('active', h > 14);
+            });
+            requestAnimationFrame(() => setTimeout(animateViz, 120));
+        }
+
+        // === Toast ===
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 1500);
+        }
+
+        // === 深色模式 ===
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('podcast-theme', isDark ? 'dark' : 'light');
+        }
+
+        // 恢复主题
+        if (localStorage.getItem('podcast-theme') === 'dark') {
+            document.body.classList.add('dark');
+            document.getElementById('themeBtn').textContent = '☀️';
+        }
+
+        // === 音量控制 ===
+        function changeVolume(val) {
+            const v = parseInt(val);
+            audio.volume = v / 100;
+            document.getElementById('volumePct').textContent = v + '%';
+            updateVolumeIcon(v);
+        }
+
+        function toggleMute() {
+            if (audio.volume > 0) {
+                audio._prevVolume = audio.volume;
+                audio.volume = 0;
+                volumeSlider.value = 0;
+                document.getElementById('volumePct').textContent = '0%';
+                updateVolumeIcon(0);
+            } else {
+                const prev = audio._prevVolume || 0.8;
+                audio.volume = prev;
+                volumeSlider.value = Math.round(prev * 100);
+                document.getElementById('volumePct').textContent = Math.round(prev * 100) + '%';
+                updateVolumeIcon(Math.round(prev * 100));
+            }
+        }
+
+        function updateVolumeIcon(v) {
+            const icon = document.getElementById('volumeIcon');
+            if (v === 0) icon.textContent = '🔇';
+            else if (v < 30) icon.textContent = '🔈';
+            else if (v < 70) icon.textContent = '🔉';
+            else icon.textContent = '🔊';
+        }
+
+        // === 倍速 ===
+        function cycleSpeed() {
+            speedIndex = (speedIndex + 1) % speeds.length;
+            const s = speeds[speedIndex];
+            audio.playbackRate = s;
+            document.getElementById('speedBtn').textContent = s + 'x';
+            showToast('播放速度 ' + s + 'x');
+        }
+
+        // === 睡眠定时器 ===
+        function toggleSleepPopup() {
+            document.getElementById('sleepPopup').classList.toggle('show');
+        }
+
+        function setSleepTimer(min) {
+            clearTimeout(sleepTimer);
+            sleepTimer = null;
+            sleepRemaining = 0;
+
+            if (min === 0) {
+                document.getElementById('sleepBtn').classList.remove('active');
+                document.getElementById('sleepBadge').textContent = '';
+                showToast('睡眠定时器已关闭');
+                toggleSleepPopup();
+                return;
+            }
+
+            sleepMinutes = min;
+            sleepRemaining = min * 60;
+            document.getElementById('sleepBtn').classList.add('active');
+            updateSleepBadge();
+
+            sleepTimer = setInterval(() => {
+                sleepRemaining--;
+                if (sleepRemaining <= 0) {
+                    clearInterval(sleepTimer);
+                    audio.pause();
+                    isPlaying = false;
+                    document.getElementById('playPause').textContent = '▶';
+                    document.getElementById('sleepBtn').classList.remove('active');
+                    document.getElementById('sleepBadge').textContent = '';
+                    showToast('睡眠定时器结束，已暂停播放');
+                    return;
+                }
+                updateSleepBadge();
+            }, 1000);
+
+            showToast(min + ' 分钟后停止播放');
+            toggleSleepPopup();
+        }
+
+        function updateSleepBadge() {
+            const m = Math.ceil(sleepRemaining / 60);
+            document.getElementById('sleepBadge').textContent = m + 'm';
+        }
+
+        // 点击外部关闭弹窗
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.sleep-btn') && !e.target.closest('.sleep-popup')) {
+                document.getElementById('sleepPopup').classList.remove('show');
+            }
+        });
+
+        // === 文件导入 ===
+        importZone.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') fileInput.click();
+        });
+
+        importZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            importZone.classList.add('dragover');
+        });
+
+        importZone.addEventListener('dragleave', () => importZone.classList.remove('dragover'));
+
+        importZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            importZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+            fileInput.value = '';
+        });
+
+        function handleFiles(files) {
+            let count = 0;
+            for (const file of files) {
+                if (!file.type.startsWith('audio/')) continue;
+                const id = Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+                const url = URL.createObjectURL(file);
+                const name = file.name.replace(/\.[^.]+$/, '');
+                importedAudios.push({ id, name, url, size: file.size, lrc: null, lrcName: '' });
+                count++;
+            }
+            if (count > 0) {
+                renderImported();
+                showToast('已导入 ' + count + ' 个音频');
+            }
+        }
+
+        function renderImported() {
+            if (importedAudios.length === 0) {
+                importedList.innerHTML = '';
+                return;
+            }
+            importedList.innerHTML = importedAudios.map((a, i) => {
+                const playing = currentSource === 'imported' && currentIndex === i;
+                const sizeMB = (a.size / (1024 * 1024)).toFixed(1);
+                const hasLrc = a.lrc !== null;
+                return `
+                    <div class="imported-item ${playing ? 'playing' : ''}" onclick="playImported(${i})">
+                        <div class="imported-icon">♫</div>
+                        <div class="imported-info">
+                            <div class="imported-name">${a.name}</div>
+                            <div class="imported-meta">${sizeMB} MB${hasLrc ? ' · 含歌词' : ''}</div>
+                        </div>
+                        <div class="imported-actions">
+                            <button class="imported-lrc-btn ${hasLrc ? 'has-lrc' : ''}" onclick="event.stopPropagation(); importLrc(${i})" title="导入歌词 LRC">词</button>
+                            <button class="imported-remove" onclick="event.stopPropagation(); removeImported(${i})" title="移除">✕</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function removeImported(index) {
+            if (currentSource === 'imported' && currentIndex === index) {
+                audio.pause();
+                audio.src = '';
+                isPlaying = false;
+                document.getElementById('playPause').textContent = '▶';
+                document.getElementById('playerTitle').textContent = '选择一集开始收听';
+                currentSource = null;
+                lyricsData = [];
+                currentLyricIndex = -1;
+                renderLyrics();
+            }
+            URL.revokeObjectURL(importedAudios[index].url);
+            importedAudios.splice(index, 1);
+            renderImported();
+        }
+
+        // === 歌词导入 ===
+        function importLrc(index) {
+            lrcTargetIndex = index;
+            lrcInput.click();
+        }
+
+        lrcInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file || lrcTargetIndex === null) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                importedAudios[lrcTargetIndex].lrc = parseLRC(ev.target.result);
+                importedAudios[lrcTargetIndex].lrcName = file.name;
+                renderImported();
+                if (currentSource === 'imported' && currentIndex === lrcTargetIndex) {
+                    lyricsData = importedAudios[lrcTargetIndex].lrc;
+                    currentLyricIndex = -1;
+                    renderLyrics();
+                    lyricsPanel.classList.add('show');
+                }
+                showToast('歌词已导入');
+            };
+            reader.readAsText(file);
+            lrcInput.value = '';
+        });
+
+        function parseLRC(text) {
+            const lines = text.split('\n');
+            const result = [];
+            const regex = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+            for (const line of lines) {
+                const match = line.match(regex);
+                if (match) {
+                    const min = parseInt(match[1]);
+                    const sec = parseInt(match[2]);
+                    const ms = parseInt(match[3].padEnd(3, '0'));
+                    const time = min * 60 + sec + ms / 1000;
+                    const t = line.replace(/\[\d{2}:\d{2}\.\d{2,3}\]/g, '').trim();
+                    if (t) result.push({ time, text: t });
+                }
+            }
+            return result.sort((a, b) => a.time - b.time);
+        }
+
+        function renderLyrics() {
+            if (lyricsData.length === 0) {
+                lyricsBody.innerHTML = '<div class="lyrics-empty">暂无歌词 · 点击音频旁的「词」按钮导入 LRC 文件</div>';
+                return;
+            }
+            lyricsBody.innerHTML = lyricsData.map((l, i) => {
+                let cls = 'lyric-line';
+                if (i === currentLyricIndex) cls += ' active';
+                else if (i < currentLyricIndex) cls += ' past';
+                return `<div class="${cls}" id="lyric-${i}">${l.text}</div>`;
+            }).join('');
+        }
+
+        function updateLyricPosition(time) {
+            if (lyricsData.length === 0) return;
+            let idx = -1;
+            for (let i = lyricsData.length - 1; i >= 0; i--) {
+                if (time >= lyricsData[i].time) { idx = i; break; }
+            }
+            if (idx !== currentLyricIndex) {
+                currentLyricIndex = idx;
+                renderLyrics();
+                const el = document.getElementById('lyric-' + idx);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function toggleLyricsPanel() {
+            lyricsPanel.classList.toggle('show');
+        }
+
+        // === 播放控制 ===
+        function playImported(index) {
+            currentSource = 'imported';
+            currentIndex = index;
+            const a = importedAudios[index];
+            audio.src = a.url;
+            audio.playbackRate = speeds[speedIndex];
+            audio.play();
+            isPlaying = true;
+            document.getElementById('playPause').textContent = '⏸';
+            document.getElementById('playerTitle').textContent = a.name;
+            document.getElementById('playerSub').textContent = '导入的音频';
+            lyricsData = a.lrc || [];
+            currentLyricIndex = -1;
+            renderLyrics();
+            if (lyricsData.length > 0) lyricsPanel.classList.add('show');
+            renderImported();
+            animateViz();
+        }
+
+        function playEpisode(index) {
+            currentSource = 'builtin';
+            currentIndex = index;
+            const ep = builtinEpisodes[index];
+            audio.pause();
+            audio.src = '';
+            isPlaying = true;
+            document.getElementById('playPause').textContent = '⏸';
+            document.getElementById('playerTitle').textContent = `${ep.num} ${ep.title}`;
+            document.getElementById('playerSub').textContent = '留白电台';
+            document.getElementById('totalTime').textContent = ep.dur;
+            lyricsData = [];
+            currentLyricIndex = -1;
+            renderLyrics();
+            lyricsPanel.classList.remove('show');
+            simulateBuiltin(ep.durSec);
+            animateViz();
+        }
+
+        function simulateBuiltin(totalSec) {
+            if (!isPlaying || currentSource !== 'builtin') return;
+            const fill = document.getElementById('barFill');
+            const cur = document.getElementById('currentTime');
+            let pct = parseFloat(fill.style.width) || 0;
+            pct += 100 / (totalSec * 10);
+            if (pct >= 100) { pct = 0; nextTrack(); return; }
+            fill.style.width = pct + '%';
+            const sec = Math.floor(totalSec * pct / 100);
+            cur.textContent = formatTime(sec);
+            setTimeout(() => simulateBuiltin(totalSec), 100);
+        }
+
+        function togglePlay() {
+            if (currentSource === 'imported') {
+                if (isPlaying) audio.pause(); else { audio.play(); animateViz(); }
+                isPlaying = !isPlaying;
+            } else if (currentSource === 'builtin') {
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    simulateBuiltin(builtinEpisodes[currentIndex].durSec);
+                    animateViz();
+                }
+            }
+            document.getElementById('playPause').textContent = isPlaying ? '⏸' : '▶';
+        }
+
+        function prevTrack() {
+            if (currentSource === 'imported') {
+                if (importedAudios.length === 0) return;
+                playImported((currentIndex - 1 + importedAudios.length) % importedAudios.length);
+            } else {
+                playEpisode((currentIndex - 1 + builtinEpisodes.length) % builtinEpisodes.length);
+            }
+        }
+
+        function nextTrack() {
+            if (currentSource === 'imported') {
+                if (importedAudios.length === 0) return;
+                playImported((currentIndex + 1) % importedAudios.length);
+            } else {
+                playEpisode((currentIndex + 1) % builtinEpisodes.length);
+            }
+        }
+
+        // 进度条点击
+        document.getElementById('barTrack').addEventListener('click', (e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const pct = ((e.clientX - rect.left) / rect.width) * 100;
+            document.getElementById('barFill').style.width = pct + '%';
+            if (currentSource === 'imported' && audio.duration) {
+                audio.currentTime = audio.duration * pct / 100;
+            }
+        });
+
+        // 真实音频时间更新
+        audio.addEventListener('timeupdate', () => {
+            if (currentSource !== 'imported') return;
+            const pct = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('barFill').style.width = pct + '%';
+            document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
+            updateLyricPosition(audio.currentTime);
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            document.getElementById('totalTime').textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('ended', () => nextTrack());
+
+        function formatTime(sec) {
+            sec = Math.floor(sec);
+            return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+        }
+
+        // === 快捷键 ===
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            switch (e.code) {
+                case 'Space':
+                    e.preventDefault();
+                    togglePlay();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    if (currentSource === 'imported' && audio.duration) {
+                        audio.currentTime = Math.max(0, audio.currentTime - 10);
+                        showToast('快退 10s');
+                    }
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    if (currentSource === 'imported' && audio.duration) {
+                        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+                        showToast('快进 10s');
+                    }
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    volumeSlider.value = Math.min(100, parseInt(volumeSlider.value) + 5);
+                    changeVolume(volumeSlider.value);
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    volumeSlider.value = Math.max(0, parseInt(volumeSlider.value) - 5);
+                    changeVolume(volumeSlider.value);
+                    break;
+                case 'KeyN':
+                    nextTrack();
+                    break;
+                case 'KeyP':
+                    prevTrack();
+                    break;
+            }
+        });
+    </script>
+
+</body>
+</html>
