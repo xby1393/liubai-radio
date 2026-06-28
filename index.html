@@ -846,274 +846,6 @@
             padding-bottom: 6rem;
         }
 
-                /* === 收藏功能 === */
-        .bookmarks-section {
-            margin-top: 2.5rem;
-        }
-
-        .bookmark-category-bar {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.2rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .bookmark-category-btn {
-            padding: 0.35rem 0.9rem;
-            border-radius: 20px;
-            border: 1px solid var(--border2);
-            background: var(--card);
-            color: var(--text3);
-            font-size: 0.78rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .bookmark-category-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .bookmark-category-btn.active {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-        }
-
-        .bookmark-add-btn {
-            margin-left: auto;
-            padding: 0.35rem 1rem;
-            border-radius: 20px;
-            border: 1px solid var(--accent);
-            background: transparent;
-            color: var(--accent);
-            font-size: 0.78rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .bookmark-add-btn:hover {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .bookmarks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1rem;
-        }
-
-        .bookmark-card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 1.2rem 1.4rem;
-            box-shadow: 0 1px 3px var(--shadow);
-            border: 1px solid transparent;
-            transition: all 0.2s;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .bookmark-card:hover {
-            box-shadow: 0 4px 16px var(--shadow2);
-            transform: translateY(-2px);
-        }
-
-        .bookmark-card-header {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 0.6rem;
-        }
-
-        .bookmark-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .bookmark-title {
-            font-size: 0.9rem;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex: 1;
-        }
-
-        .bookmark-url {
-            font-size: 0.72rem;
-            color: var(--text4);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 0.4rem;
-        }
-
-        .bookmark-category-tag {
-            display: inline-block;
-            font-size: 0.68rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 10px;
-            background: color-mix(in srgb, var(--accent) 10%, transparent);
-            color: var(--accent);
-        }
-
-        .bookmark-actions {
-            position: absolute;
-            top: 0.8rem;
-            right: 0.8rem;
-            display: flex;
-            gap: 0.3rem;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .bookmark-card:hover .bookmark-actions {
-            opacity: 1;
-        }
-
-        .bookmark-action-btn {
-            width: 26px;
-            height: 26px;
-            border-radius: 6px;
-            border: none;
-            background: var(--bg);
-            color: var(--text3);
-            font-size: 0.75rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.15s;
-        }
-
-        .bookmark-action-btn:hover {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .bookmark-action-btn.delete:hover {
-            background: #e74c3c;
-        }
-
-        .bookmarks-empty {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--text4);
-            font-size: 0.88rem;
-        }
-
-        .bookmarks-empty-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.8rem;
-            opacity: 0.5;
-        }
-
-        /* 收藏表单弹窗 */
-        .bookmark-form-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 500;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-
-        .bookmark-form-overlay.show {
-            display: flex;
-        }
-
-        .bookmark-form {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 420px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-        }
-
-        .bookmark-form h3 {
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.78rem;
-            color: var(--text3);
-            margin-bottom: 0.4rem;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.6rem 0.8rem;
-            border: 1px solid var(--border2);
-            border-radius: 8px;
-            background: var(--bg);
-            color: var(--text);
-            font-size: 0.85rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: var(--accent);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 1.5rem;
-        }
-
-        .form-actions button {
-            flex: 1;
-            padding: 0.6rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .form-cancel {
-            background: var(--bg);
-            border: 1px solid var(--border2);
-            color: var(--text3);
-        }
-
-        .form-cancel:hover {
-            border-color: var(--text3);
-            color: var(--text2);
-        }
-
-        .form-save {
-            background: var(--accent);
-            border: 1px solid var(--accent);
-            color: #fff;
-        }
-
-        .form-save:hover {
-            background: #5a6fd6;
-        }
-
         /* 动画 */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(16px); }
@@ -1329,6 +1061,27 @@
 
         .bookmark-import-cancel:hover { border-color: var(--text3); color: var(--text2); }
 
+        /* 分类筛选样式 */
+        .bookmark-categories {
+            display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;
+        }
+        .bookmark-category-btn {
+            padding: 0.4rem 0.8rem; background: transparent; color: var(--text3);
+            border: 1px solid var(--border2); border-radius: 20px; font-size: 0.78rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .bookmark-category-btn:hover {
+            border-color: var(--accent); color: var(--accent);
+        }
+        .bookmark-category-btn.active {
+            background: var(--accent); color: #fff; border-color: var(--accent);
+        }
+        .bookmark-category-tag {
+            font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 10px;
+            background: color-mix(in srgb, var(--accent) 15%, transparent);
+            color: var(--accent); margin-top: 0.5rem; display: inline-block;
+        }
+
         .bookmarks-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;
         }
@@ -1387,6 +1140,232 @@
             .bookmarks-grid { grid-template-columns: 1fr; }
             .bookmark-form-row { flex-direction: column; }
         }
+        /* === 滚动看板 === */
+        .gallery-section { margin-top: 3rem; }
+        .gallery-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .gallery-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .gallery-add-btn {
+            background: var(--card-bg);
+            border: 1px dashed var(--border);
+            color: var(--text);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .gallery-add-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .gallery-scroll-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        .gallery-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 0.5rem 0 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+        .gallery-scroll::-webkit-scrollbar { height: 6px; }
+        .gallery-scroll::-webkit-scrollbar-track { background: transparent; }
+        .gallery-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        .gallery-card {
+            flex: 0 0 auto;
+            width: 220px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .gallery-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        .gallery-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+        }
+        .gallery-card-info {
+            padding: 0.6rem 0.8rem;
+        }
+        .gallery-card-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .gallery-card-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+        .gallery-card-delete {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .gallery-card:hover .gallery-card-delete { display: flex; }
+        .gallery-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+        .gallery-empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: opacity 0.2s;
+        }
+        .gallery-nav:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .gallery-nav-left { left: 4px; }
+        .gallery-nav-right { right: 4px; }
+        .gallery-form-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .gallery-form-overlay.active { display: flex; }
+        .gallery-form {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+        }
+        .gallery-form h3 { margin: 0 0 1rem; font-size: 1.1rem; }
+        .gallery-form .form-group { margin-bottom: 0.8rem; }
+        .gallery-form .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-secondary);
+        }
+        .gallery-form .form-group input,
+        .gallery-form .form-group textarea {
+            width: 100%;
+            padding: 0.5rem 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+        .gallery-form .form-group textarea { resize: vertical; min-height: 60px; }
+        .gallery-form .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+        .gallery-form .form-cancel {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+        }
+        .gallery-form .form-save {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            cursor: pointer;
+        }
+        .gallery-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .lightbox-overlay.active { display: flex; }
+        .lightbox-overlay img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -1394,12 +1373,9 @@
     <nav>
         <div class="nav-brand">留白电台</div>
         <div class="nav-right">
-            <ul class="nav-links">
+                        <ul class="nav-links">
                 <li><a href="#episodes">节目</a></li>
                 <li><a href="#notes">笔记</a></li>
-                <li><a href="#bookmarks">收藏</a></li>
-                <li><a href="#about">关于</a></li>
-            </ul>
                 <li><a href="#bookmarks">收藏</a></li>
                 <li><a href="#about">关于</a></li>
             </ul>
@@ -1521,52 +1497,89 @@
                     <button class="note-save-btn" onclick="saveNote()">保存</button>
                 </div>
             </div>
-            
+
             <div class="notes-list" id="notesList">
                 <div class="notes-empty">还没有笔记，开始记录吧 ✍️</div>
             </div>
         </div>
-        
-        <!-- 收藏板块 -->
-        <div class="bookmarks-section" id="bookmarks">
-            <div class="section-title">我的收藏</div>
-            <div class="bookmark-category-bar" id="bookmarkCategoryBar">
-                <button class="bookmark-category-btn active" data-category="all" onclick="filterBookmarksByCategory('all')">全部</button>
-                <button class="bookmark-add-btn" onclick="openBookmarkForm()">+ 添加收藏</button>
+
+        <!-- 滚动看板 -->
+        <div class="gallery-section" id="gallery">
+            <div class="gallery-header">
+                <div class="section-title">📷 看板</div>
+                <div class="gallery-actions">
+                    <button class="gallery-add-btn" onclick="openGalleryForm()">+ 添加照片</button>
+                </div>
             </div>
-            <div class="bookmarks-grid" id="bookmarksGrid"></div>
-            <div class="bookmarks-empty" id="bookmarksEmpty" style="display:none;">
-                <div class="bookmarks-empty-icon">📌</div>
-                <div>还没有收藏，点击上方按钮添加</div>
+            <div class="gallery-scroll-wrapper">
+                <button class="gallery-nav gallery-nav-left" onclick="scrollGallery(-1)">‹</button>
+                <div class="gallery-scroll" id="galleryScroll"></div>
+                <button class="gallery-nav gallery-nav-right" onclick="scrollGallery(1)">›</button>
+            </div>
+            <div class="gallery-empty" id="galleryEmpty">
+                <div class="gallery-empty-icon">🖼️</div>
+                <div>还没有照片，点击上方按钮添加</div>
             </div>
         </div>
         
-        <!-- 收藏表单弹窗 -->
-        <div class="bookmark-form-overlay" id="bookmarkFormOverlay">
-            <div class="bookmark-form">
-                <h3 id="bookmarkFormTitle">添加收藏</h3>
+        <!-- 看板添加弹窗 -->
+        <div class="gallery-form-overlay" id="galleryFormOverlay">
+            <div class="gallery-form">
+                <h3 id="galleryFormTitle">添加照片</h3>
                 <div class="form-group">
-                    <label>名称</label>
-                    <input type="text" id="bookmarkName" placeholder="给收藏起个名字">
+                    <label>图片链接</label>
+                    <input type="url" id="galleryUrl" placeholder="https://... 或粘贴图片地址" oninput="previewGalleryImage()">
+                    <img class="gallery-preview" id="galleryPreview">
                 </div>
                 <div class="form-group">
-                    <label>链接</label>
-                    <input type="url" id="bookmarkUrl" placeholder="https://...">
+                    <label>标题（可选）</label>
+                    <input type="text" id="galleryTitle" placeholder="给照片起个名字">
                 </div>
                 <div class="form-group">
-                    <label>图标（Emoji）</label>
-                    <input type="text" id="bookmarkIcon" placeholder="🎵" maxlength="4">
-                </div>
-                <div class="form-group">
-                    <label>分类</label>
-                    <input type="text" id="bookmarkCategory" placeholder="如：音乐、播客、工具（可留空）">
+                    <label>备注（可选）</label>
+                    <textarea id="galleryNote" placeholder="记录一下背后的故事..."></textarea>
                 </div>
                 <div class="form-actions">
-                    <button class="form-cancel" onclick="closeBookmarkForm()">取消</button>
-                    <button class="form-save" onclick="saveBookmark()">保存</button>
+                    <button class="form-cancel" onclick="closeGalleryForm()">取消</button>
+                    <button class="form-save" onclick="saveGalleryItem()">保存</button>
                 </div>
             </div>
         </div>
+        
+        <!-- 灯箱 -->
+        <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+            <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+            <img id="lightboxImg" src="">
+        </div>
+        <!-- 收藏传送门 -->
+        <div class="bookmarks-section" id="bookmarks">
+            <div class="section-title">收藏传送门</div>
+            
+            <button class="bookmark-add-btn" onclick="toggleBookmarkForm()">
+                <span>+</span> 添加收藏
+            </button>
+            <button class="bookmark-import-btn" onclick="triggerBookmarkImport()">
+                <span>📥</span> 导入书签
+            </button>
+            <input type="file" id="bookmarkFileInput" accept=".html,.htm" style="display:none" onchange="handleBookmarkFile(event)">
+
+            <div class="bookmark-add-form" id="bookmarkForm">
+                <div class="bookmark-form-row">
+                    <input type="text" class="bookmark-input" id="bookmarkName" placeholder="网站名称">
+                    <input type="text" class="bookmark-input" id="bookmarkUrl" placeholder="网址 (https://...)">
+                </div>
+                <div class="bookmark-form-row">
+                    <input type="text" class="bookmark-input" id="bookmarkIcon" placeholder="图标 (emoji 或文字，如 🎵 或 G)">
+                    <button class="bookmark-save-btn" onclick="saveBookmark()">保存</button>
+                    <button class="bookmark-cancel-btn" onclick="toggleBookmarkForm()">取消</button>
+                </div>
+            </div>
+
+            <div class="bookmarks-grid" id="bookmarksGrid">
+            <div class="bookmark-categories" id="bookmarkCategories">
+                <button class="bookmark-category-btn active" onclick="filterBookmarks('all')">全部</button>
+            </div>
+                <div class="bookmarks-empty">还没有收藏，添加你常用的网站吧 🔗</div>
             </div>
         </div>
 
@@ -1667,6 +1680,7 @@
         // === 笔记和收藏数据 ===
         let notes = [];
         let bookmarks = [];
+        let currentBookmarkCategory = 'all';
         let editingNoteId = null;
         let editingBookmarkId = null;
 
@@ -2316,30 +2330,6 @@
         });
 
                 // 页面加载时恢复音频
-                // === 收藏功能 ===
-        let bookmarks = [];
-        let currentBookmarkCategory = 'all';
-        let editingBookmarkId = null;
-
-        // IndexedDB 收藏存储
-        const BOOKMARK_DB_NAME = 'LiubaiRadioBookmarks';
-        const BOOKMARK_DB_VERSION = 1;
-        const BOOKMARK_STORE = 'bookmarks';
-        let bookmarkDb = null;
-
-        function openBookmarkDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(BOOKMARK_DB_NAME, BOOKMARK_DB_VERSION);
-                request.onerror = () => reject(request.error);
-                request.onsuccess = () => resolve(request.result);
-                request.onupgradeneeded = (e) => {
-                    const database = e.target.result;
-                    if (!database.objectStoreNames.contains(BOOKMARK_STORE)) {
-                        database.createObjectStore(BOOKMARK_STORE, { keyPath: 'id' });
-                    }
-                };
-            });
-        }
         restoreAudios();
 
         // === 笔记功能 ===
@@ -2452,6 +2442,7 @@
             const name = document.getElementById('bookmarkName').value.trim();
             const url = document.getElementById('bookmarkUrl').value.trim();
             const icon = document.getElementById('bookmarkIcon').value.trim() || '🔗';
+            const category = document.getElementById('bookmarkCategory').value.trim() || '未分类';
 
             if (!name || !url) {
                 showToast('请输入网站名称和网址');
@@ -2471,6 +2462,7 @@
                     bookmark.name = name;
                     bookmark.url = finalUrl;
                     bookmark.icon = icon;
+                    bookmark.category = category;
                     saveBookmarkToDB(bookmark);
                 }
                 editingBookmarkId = null;
@@ -2481,6 +2473,7 @@
                     name: name,
                     url: finalUrl,
                     icon: icon,
+                    category: category,
                     createdAt: new Date().toISOString()
                 };
                 bookmarks.push(bookmark);
@@ -2491,6 +2484,7 @@
             document.getElementById('bookmarkName').value = '';
             document.getElementById('bookmarkUrl').value = '';
             document.getElementById('bookmarkIcon').value = '';
+            document.getElementById('bookmarkCategory').value = '';
             document.getElementById('bookmarkForm').classList.remove('show');
             
             renderBookmarks();
@@ -2619,6 +2613,154 @@
                 showToast('未找到可导入的书签');
             }
         }
+        // === 滚动看板 ===
+        const GALLERY_DB_NAME = 'LiubaiRadioGallery';
+        const GALLERY_DB_VERSION = 1;
+        const GALLERY_STORE = 'photos';
+        let galleryDb = null;
+        let galleryItems = [];
+        let editingGalleryId = null;
+
+        function openGalleryDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(GALLERY_DB_NAME, GALLERY_DB_VERSION);
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => resolve(request.result);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(GALLERY_STORE)) {
+                        db.createObjectStore(GALLERY_STORE, { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+
+        async function loadGalleryItems() {
+            galleryDb = await openGalleryDB();
+            return new Promise((resolve) => {
+                const tx = galleryDb.transaction(GALLERY_STORE, 'readonly');
+                const store = tx.objectStore(GALLERY_STORE);
+                const req = store.getAll();
+                req.onsuccess = () => {
+                    galleryItems = req.result.sort((a, b) => b.createdAt - a.createdAt);
+                    renderGallery();
+                    resolve();
+                };
+                req.onerror = () => resolve();
+            });
+        }
+
+        function renderGallery() {
+            const scroll = document.getElementById('galleryScroll');
+            const empty = document.getElementById('galleryEmpty');
+            if (!galleryItems.length) {
+                scroll.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+            scroll.innerHTML = galleryItems.map(item => `<div class="gallery-card" data-id="${item.id}">
+                    <img src="${item.url}" alt="${item.title || ''}" onclick="openLightbox('${item.url.replace(/'/g, "\')}')" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'220\' height=\'160\'><rect fill=\'%23ddd\' width=\'220\' height=\'160\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23999\' font-size=\'14\'>加载失败</text></svg>'"
+                    >
+                    <button class="gallery-card-delete" onclick="event.stopPropagation();deleteGalleryItem('${item.id}')" title="删除">✕</button>
+                    <div class="gallery-card-info">
+                        <div class="gallery-card-title">${item.title || '未命名'}</div>
+                        <div class="gallery-card-date">${new Date(item.createdAt).toLocaleDateString()}</div>
+                    </div>
+                </div>
+            ).join('');
+        }
+
+        function scrollGallery(dir) {
+            const scroll = document.getElementById('galleryScroll');
+            scroll.scrollBy({ left: dir * 240, behavior: 'smooth' });
+        }
+
+        function openGalleryForm(id) {
+            editingGalleryId = id || null;
+            const overlay = document.getElementById('galleryFormOverlay');
+            const title = document.getElementById('galleryFormTitle');
+            const urlInput = document.getElementById('galleryUrl');
+            const titleInput = document.getElementById('galleryTitle');
+            const noteInput = document.getElementById('galleryNote');
+            const preview = document.getElementById('galleryPreview');
+            if (id) {
+                const item = galleryItems.find(i => i.id === id);
+                if (item) {
+                    title.textContent = '编辑照片';
+                    urlInput.value = item.url;
+                    titleInput.value = item.title || '';
+                    noteInput.value = item.note || '';
+                    preview.src = item.url;
+                    preview.style.display = 'block';
+                }
+            } else {
+                title.textContent = '添加照片';
+                urlInput.value = '';
+                titleInput.value = '';
+                noteInput.value = '';
+                preview.style.display = 'none';
+            }
+            overlay.classList.add('active');
+        }
+
+        function closeGalleryForm() {
+            document.getElementById('galleryFormOverlay').classList.remove('active');
+            editingGalleryId = null;
+        }
+
+        function previewGalleryImage() {
+            const url = document.getElementById('galleryUrl').value.trim();
+            const preview = document.getElementById('galleryPreview');
+            if (url) {
+                preview.src = url;
+                preview.style.display = 'block';
+                preview.onerror = () => { preview.style.display = 'none'; };
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        async function saveGalleryItem() {
+            const url = document.getElementById('galleryUrl').value.trim();
+            if (!url) { showToast('请输入图片链接'); return; }
+            const title = document.getElementById('galleryTitle').value.trim();
+            const note = document.getElementById('galleryNote').value.trim();
+            if (!galleryDb) galleryDb = await openGalleryDB();
+            const tx = galleryDb.transaction(GALLERY_STORE, 'readwrite');
+            const store = tx.objectStore(GALLERY_STORE);
+            if (editingGalleryId) {
+                const existing = galleryItems.find(i => i.id === editingGalleryId);
+                store.put({ ...existing, url, title, note });
+            } else {
+                store.put({ id: 'photo_' + Date.now(), url, title, note, createdAt: Date.now() });
+            }
+            tx.oncomplete = () => {
+                closeGalleryForm();
+                loadGalleryItems();
+                showToast(editingGalleryId ? '已更新' : '已添加');
+            };
+        }
+
+        async function deleteGalleryItem(id) {
+            if (!confirm('确定删除这张照片？')) return;
+            if (!galleryDb) galleryDb = await openGalleryDB();
+            const tx = galleryDb.transaction(GALLERY_STORE, 'readwrite');
+            tx.objectStore(GALLERY_STORE).delete(id);
+            tx.oncomplete = () => loadGalleryItems();
+        }
+
+        function openLightbox(url) {
+            document.getElementById('lightboxImg').src = url;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        // 页面加载时初始化看板
+        loadGalleryItems();
     </script>
 
 </body>
