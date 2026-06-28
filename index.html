@@ -170,10 +170,10 @@
             margin: 2.5rem auto;
         }
 
-        /* 内容区 */
+                /* 内容区 */
         main {
             flex: 1;
-            max-width: 680px;
+            max-width: 900px;
             width: 100%;
             margin: 0 auto;
             padding: 0 2rem 8rem;
@@ -1252,7 +1252,7 @@
         }
 
         function setSleepTimer(min) {
-            clearTimeout(sleepTimer);
+                        clearInterval(sleepTimer);
             sleepTimer = null;
             sleepRemaining = 0;
 
@@ -1323,7 +1323,7 @@
             fileInput.value = '';
         });
 
-                async function handleFiles(files) {
+                        async function handleFiles(files) {
             let count = 0;
             for (const file of files) {
                 if (!file.type.startsWith('audio/')) continue;
@@ -1342,7 +1342,7 @@
                 }
 
                 importedAudios.push(audioData);
-                count++;
+                            count++;
             }
             if (count > 0) {
                 renderImported();
@@ -1375,7 +1375,7 @@
             }).join('');
         }
 
-                async function removeImported(index) {
+        async function removeImported(index) {
             if (currentSource === 'imported' && currentIndex === index) {
                 audio.pause();
                 audio.src = '';
@@ -1406,7 +1406,7 @@
             lrcInput.click();
         }
 
-                lrcInput.addEventListener('change', async (e) => {
+        lrcInput.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file || lrcTargetIndex === null) return;
             const reader = new FileReader();
@@ -1566,13 +1566,18 @@
             }
         }
 
-        // 进度条点击
+                // 进度条点击
         document.getElementById('barTrack').addEventListener('click', (e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const pct = ((e.clientX - rect.left) / rect.width) * 100;
             document.getElementById('barFill').style.width = pct + '%';
             if (currentSource === 'imported' && audio.duration) {
                 audio.currentTime = audio.duration * pct / 100;
+            } else if (currentSource === 'builtin') {
+                // 内置节目：更新当前时间显示
+                const ep = builtinEpisodes[currentIndex];
+                const sec = Math.floor(ep.durSec * pct / 100);
+                document.getElementById('currentTime').textContent = formatTime(sec);
             }
         });
 
@@ -1622,7 +1627,7 @@
                     e.preventDefault();
                     volumeSlider.value = Math.min(100, parseInt(volumeSlider.value) + 5);
                     changeVolume(volumeSlider.value);
-                    break;
+                                    break;
                 case 'ArrowDown':
                     e.preventDefault();
                     volumeSlider.value = Math.max(0, parseInt(volumeSlider.value) - 5);
@@ -1634,7 +1639,7 @@
                 case 'KeyP':
                     prevTrack();
                     break;
-                        }
+                }
         });
 
         // 页面加载时恢复音频
