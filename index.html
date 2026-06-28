@@ -1575,10 +1575,10 @@
                 </div>
             </div>
 
-            <div class="bookmarks-grid" id="bookmarksGrid">
-            <div class="bookmark-categories" id="bookmarkCategories">
-                <button class="bookmark-category-btn active" onclick="filterBookmarks('all')">全部</button>
+                        <div class="bookmark-categories" id="bookmarkCategories">
+                <button class="bookmark-category-btn active" data-cat="all" onclick="filterBookmarks('all')">全部</button>
             </div>
+            <div class="bookmarks-grid" id="bookmarksGrid">
                 <div class="bookmarks-empty">还没有收藏，添加你常用的网站吧 🔗</div>
             </div>
         </div>
@@ -2442,7 +2442,7 @@
             const name = document.getElementById('bookmarkName').value.trim();
             const url = document.getElementById('bookmarkUrl').value.trim();
             const icon = document.getElementById('bookmarkIcon').value.trim() || '🔗';
-            const category = document.getElementById('bookmarkCategory').value.trim() || '未分类';
+                        const category = '未分类';
 
             if (!name || !url) {
                 showToast('请输入网站名称和网址');
@@ -2481,10 +2481,9 @@
             }
 
             // 清空表单
-            document.getElementById('bookmarkName').value = '';
+                        document.getElementById('bookmarkName').value = '';
             document.getElementById('bookmarkUrl').value = '';
             document.getElementById('bookmarkIcon').value = '';
-            document.getElementById('bookmarkCategory').value = '';
             document.getElementById('bookmarkForm').classList.remove('show');
             
             renderBookmarks();
@@ -2518,14 +2517,33 @@
             showToast('收藏已删除');
         }
 
+                function filterBookmarks(category) {
+            currentBookmarkCategory = category;
+            // 更新按钮状态
+            document.querySelectorAll('.bookmark-category-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.cat === category);
+            });
+            renderBookmarks();
+        }
+
         function renderBookmarks() {
             const bookmarksGrid = document.getElementById('bookmarksGrid');
-            if (bookmarks.length === 0) {
+            const filtered = currentBookmarkCategory === 'all'
+                ? bookmarks
+                : bookmarks.filter(b => (b.category || '未分类') === currentBookmarkCategory);
+
+            // 更新分类按钮
+            const categories = [...new Set(bookmarks.map(b => b.category || '未分类'))];
+            const catContainer = document.getElementById('bookmarkCategories');
+            catContainer.innerHTML = `<button class="bookmark-category-btn ${currentBookmarkCategory === 'all' ? 'active' : ''}" data-cat="all" onclick="filterBookmarks('all')">全部</button>` +
+                categories.map(c => `<button class="bookmark-category-btn ${currentBookmarkCategory === c ? 'active' : ''}" data-cat="${escapeHtml(c)}" onclick="filterBookmarks('${escapeHtml(c)}')">${escapeHtml(c)}</button>`).join('');
+
+            if (filtered.length === 0) {
                 bookmarksGrid.innerHTML = '<div class="bookmarks-empty">还没有收藏，添加你常用的网站吧 🔗</div>';
                 return;
             }
 
-            bookmarksGrid.innerHTML = bookmarks.map(bookmark => `
+            bookmarksGrid.innerHTML = filtered.map(bookmark => `
                 <a href="${escapeHtml(bookmark.url)}" target="_blank" rel="noopener noreferrer" class="bookmark-card">
                     <div class="bookmark-icon">${bookmark.icon}</div>
                     <div class="bookmark-name">${escapeHtml(bookmark.name)}</div>
@@ -2721,15 +2739,16 @@
             }
         }
 
-        async function saveGalleryItem() {
+                async function saveGalleryItem() {
             const url = document.getElementById('galleryUrl').value.trim();
             if (!url) { showToast('请输入图片链接'); return; }
             const title = document.getElementById('galleryTitle').value.trim();
             const note = document.getElementById('galleryNote').value.trim();
+            const isEditing = editingGalleryId;
             if (!galleryDb) galleryDb = await openGalleryDB();
             const tx = galleryDb.transaction(GALLERY_STORE, 'readwrite');
             const store = tx.objectStore(GALLERY_STORE);
-            if (editingGalleryId) {
+            if (isEditing) {
                 const existing = galleryItems.find(i => i.id === editingGalleryId);
                 store.put({ ...existing, url, title, note });
             } else {
@@ -2738,7 +2757,7 @@
             tx.oncomplete = () => {
                 closeGalleryForm();
                 loadGalleryItems();
-                showToast(editingGalleryId ? '已更新' : '已添加');
+                showToast(isEditing ? '已更新' : '已添加');
             };
         }
 
