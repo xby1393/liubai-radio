@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -1261,13 +1261,6 @@
             <div class="section-title">收藏传送门</div>
             
             <button class="bookmark-add-btn" onclick="toggleBookmarkForm()">
-                <span>+</span> 添加收藏
-            </button>
-            <button class="bookmark-import-btn" onclick="triggerBookmarkImport()">
-                <span>📥</span> 导入书签
-            </button>
-            <input type="file" id="bookmarkFileInput" accept=".html,.htm" style="display:none" onchange="handleBookmarkFile(event)">
-
             <div class="bookmark-add-form" id="bookmarkForm">
                 <div class="bookmark-form-row">
                     <input type="text" class="bookmark-input" id="bookmarkName" placeholder="网站名称">
@@ -2238,4 +2231,3 @@
 
 </body>
 </html>
-
