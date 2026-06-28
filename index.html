@@ -1061,6 +1061,27 @@
 
         .bookmark-import-cancel:hover { border-color: var(--text3); color: var(--text2); }
 
+        /* 分类筛选样式 */
+        .bookmark-categories {
+            display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;
+        }
+        .bookmark-category-btn {
+            padding: 0.4rem 0.8rem; background: transparent; color: var(--text3);
+            border: 1px solid var(--border2); border-radius: 20px; font-size: 0.78rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .bookmark-category-btn:hover {
+            border-color: var(--accent); color: var(--accent);
+        }
+        .bookmark-category-btn.active {
+            background: var(--accent); color: #fff; border-color: var(--accent);
+        }
+        .bookmark-category-tag {
+            font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 10px;
+            background: color-mix(in srgb, var(--accent) 15%, transparent);
+            color: var(--accent); margin-top: 0.5rem; display: inline-block;
+        }
+
         .bookmarks-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;
         }
@@ -1281,6 +1302,9 @@
             </div>
 
             <div class="bookmarks-grid" id="bookmarksGrid">
+            <div class="bookmark-categories" id="bookmarkCategories">
+                <button class="bookmark-category-btn active" onclick="filterBookmarks('all')">全部</button>
+            </div>
                 <div class="bookmarks-empty">还没有收藏，添加你常用的网站吧 🔗</div>
             </div>
         </div>
@@ -1382,6 +1406,7 @@
         // === 笔记和收藏数据 ===
         let notes = [];
         let bookmarks = [];
+        let currentBookmarkCategory = 'all';
         let editingNoteId = null;
         let editingBookmarkId = null;
 
@@ -2143,6 +2168,7 @@
             const name = document.getElementById('bookmarkName').value.trim();
             const url = document.getElementById('bookmarkUrl').value.trim();
             const icon = document.getElementById('bookmarkIcon').value.trim() || '🔗';
+            const category = document.getElementById('bookmarkCategory').value.trim() || '未分类';
 
             if (!name || !url) {
                 showToast('请输入网站名称和网址');
@@ -2162,6 +2188,7 @@
                     bookmark.name = name;
                     bookmark.url = finalUrl;
                     bookmark.icon = icon;
+                    bookmark.category = category;
                     saveBookmarkToDB(bookmark);
                 }
                 editingBookmarkId = null;
@@ -2172,6 +2199,7 @@
                     name: name,
                     url: finalUrl,
                     icon: icon,
+                    category: category,
                     createdAt: new Date().toISOString()
                 };
                 bookmarks.push(bookmark);
@@ -2182,6 +2210,7 @@
             document.getElementById('bookmarkName').value = '';
             document.getElementById('bookmarkUrl').value = '';
             document.getElementById('bookmarkIcon').value = '';
+            document.getElementById('bookmarkCategory').value = '';
             document.getElementById('bookmarkForm').classList.remove('show');
             
             renderBookmarks();
